@@ -1,0 +1,30 @@
+.TH bhd 1
+.SH NAME
+bhd \- backwards hexdump
+.SH SYNOPSIS
+\fBbhd\fR [\fIOPTION\fR] [\fIPATH\fR...]
+.SH DESCRIPTION
+\fBbhd\fR generates a hexdump of one or more files,
+with the bytes printed from right to left.
+.PP
+The point is to make it easier to read files with little-endian fields.
+.SH OPTIONS
+.TP
+.B --forward\fR, \fB-f
+Generate a forward hexdump instead of a backwards hexdump.
+.TP
+.B --group\fR, \fB-g \fIGROUP\fR
+Set the number of bytes to group together.
+For example, if the file has 32-bit fields, you would use \fB--group 4\fR.
+.TP
+.B --no-text
+Don't print the text field to the right of the hex.
+.TP
+.B --width\fR, \fB-w \fIBYTES\fR
+Set the width of each line in bytes.
+.TP
+.B --help\fR, \fB-h
+Display a usage message.
+.TP
+.B --version\fR, \fB-v
+Display a versions string.

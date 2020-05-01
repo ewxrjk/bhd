@@ -1,0 +1,12 @@
+#! /bin/bash
+set -e
+path="$1"
+tmpfile="${path}.tmp"
+version=$(git describe --always --tags --dirty)
+exec > ${tmpfile}
+echo "package main"
+echo
+echo "// Version is the version string of the program"
+echo "const Version = \"$version\""
+
+mv ${tmpfile} ${path}
