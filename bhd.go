@@ -31,23 +31,33 @@ func main() {
 
 var bhdCmd = cobra.Command{
 	Use:   "bhd [PATH...]",
-	Short: "Backwards hexdump",
-	Long: `Backwards hexdump
+	Short: "Backward hexdump",
+	Long: `Backward hexdump
 
 Displays a hexdump of the input files, with bytes ordered from right to left,
 making little-endian fields easier to read by eye.
 • Use --group to group bytes together to easily read multi-byte fields.
-• Use --forward for a normal hexdump.
+• Use --forward for a normal hexdump. (Overrides --format)
 
---format is a comma-separated list of tokens:
-• hex is the hexdump
-• text is the plain text
+--format is a comma-separated list of tokens, providing fine-grained control
+over the output:
+• fhex or bhex is the hexdump, forward or backward respectively
+• ftext or btext is the plain text, forward or backward respectively
 • offset is the offset within the file
 `,
 	SilenceUsage:  true,
 	SilenceErrors: true,
 	Version:       Version,
 	RunE: func(cmd *cobra.Command, args []string) (err error) {
+		if forward {
+			if len(format) == 0 {
+				format = DefaultForwardFormat
+			}
+		} else {
+			if len(format) == 0 {
+				format = DefaultBackwardFormat
+			}
+		}
 		w := bufio.NewWriter(os.Stdout)
 		if len(args) == 0 {
 			if err = HexdumpFile("-", w, format); err != nil {
@@ -67,7 +77,7 @@ making little-endian fields easier to read by eye.
 	},
 }
 
-// HexdumpFile dumps the contents of path to a writer, as a (possibly backwards) hexdump
+// HexdumpFile dumps the contents of path to a writer, as a formatted hexdump
 func HexdumpFile(path string, w io.Writer, format []string) (err error) {
 	if path == "-" {
 		if err = HexdumpReader(os.Stdin, w, format); err != nil {
@@ -86,7 +96,7 @@ func HexdumpFile(path string, w io.Writer, format []string) (err error) {
 	return
 }
 
-// HexdumpReader dumps bytes read from r to a writer, as a (possibly backwards) hexdump
+// HexdumpReader dumps bytes read from r to a writer, as a formatted hexdump
 func HexdumpReader(r io.Reader, w io.Writer, format []string) (err error) {
 	b := bufio.NewReader(r)
 	var n int
@@ -97,7 +107,7 @@ func HexdumpReader(r io.Reader, w io.Writer, format []string) (err error) {
 			break
 		}
 		var s string
-		if s, err = Convert(offset, buf, n, width, group, format, !forward); err != nil {
+		if s, err = Convert(offset, buf, n, width, group, format); err != nil {
 			return
 		}
 		if _, err = fmt.Fprintf(w, "%s\n", s); err != nil {

@@ -1,6 +1,6 @@
 .TH bhd 1
 .SH NAME
-bhd \- backwards hexdump
+bhd \- backward hexdump
 .SH SYNOPSIS
 \fBbhd\fR [\fIOPTION\fR] [\fIPATH\fR...]
 .SH DESCRIPTION
@@ -11,14 +11,34 @@ The point is to make it easier to read files with little-endian fields.
 .SH OPTIONS
 .TP
 .B --forward\fR, \fB-f
-Generate a forward hexdump instead of a backwards hexdump.
+Generate a forward hexdump instead of a backward hexdump.
 .TP
 .B --group\fR, \fB-g \fIGROUP\fR
 Set the number of bytes to group together.
 For example, if the file has 32-bit fields, you would use \fB--group 4\fR.
 .TP
-.B --no-text
-Don't print the text field to the right of the hex.
+.B --format\fR, \fB-F \fITOKEN\fB,\fR...
+Format each line according to a comma-separate list of tokens.
+The valid tokens are:
+.RS
+.TP
+.B offset
+The offset of this line in the file.
+.TP
+.B fhex
+A forward hexdump.
+.TP
+.B bhex
+A backward hexdump.
+.TP
+.B ftext
+A forward text version of the bytes.
+.TP
+.B btext
+A backward text version of the bytes.
+.RE
+.IP
+This option overrides \fB--forward\fR.
 .TP
 .B --width\fR, \fB-w \fIBYTES\fR
 Set the width of each line in bytes.

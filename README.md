@@ -1,4 +1,4 @@
-# bhd - backwards hexdump
+# bhd - backward hexdump
 
 ## What?
 
