@@ -10,8 +10,10 @@ import (
 // ErrUnknownFormatString is returned when an unrecognized format token is used.
 var ErrUnknownFormatString = errors.New("unrecognized format string")
 
+// DefaultForwardFormat is the default format string with --forward.
 var DefaultForwardFormat = []string{"offset", "fhex", "ftext"}
 
+// DefaultBackwardFormat is the default format string.
 var DefaultBackwardFormat = []string{"bhex", "offset", "btext"}
 
 type conversionParameters struct {
